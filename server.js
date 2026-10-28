@@ -224,6 +224,10 @@ const server = http.createServer((req, res) => {
 
   // 3. POST /api/save - Update database records from admin
   if (req.method === 'POST' && pathname === '/api/save') {
+    if (!isAdminAuthenticated(req)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Unauthorized: Admin authentication required' }));
+    }
     let bodyStr = '';
     req.on('data', chunk => {
       bodyStr += chunk;
@@ -266,6 +270,10 @@ const server = http.createServer((req, res) => {
 
   // 4. POST /api/upload-audio - Upload audio file and store in audio/ directory
   if (req.method === 'POST' && pathname === '/api/upload-audio') {
+    if (!isAdminAuthenticated(req)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Unauthorized: Admin authentication required' }));
+    }
     let rawFilename = req.headers['x-filename'] || parsedUrl.searchParams.get('filename') || 'custom_bgm.mp3';
     try {
       rawFilename = decodeURIComponent(rawFilename);
@@ -315,6 +323,10 @@ const server = http.createServer((req, res) => {
 
   // 5. POST /api/upload-image - Upload image file and store in image/ directory
   if (req.method === 'POST' && pathname === '/api/upload-image') {
+    if (!isAdminAuthenticated(req)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Unauthorized: Admin authentication required' }));
+    }
     let slot = req.headers['x-slot'] || parsedUrl.searchParams.get('slot') || 'photo';
     slot = slot.replace(/[^a-zA-Z0-9_\-]/g, '') || 'photo';
 

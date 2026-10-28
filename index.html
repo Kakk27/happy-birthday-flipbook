@@ -53,62 +53,6 @@
     <p id="gate-d">Please turn your phone sideways to open the flipbook.</p>
   </div>
 
-  <input type="file" id="file" accept="image/*" hidden>
-
-  <!-- Crop Image Modal -->
-  <div class="crop-modal" id="cropModal" hidden role="dialog" aria-modal="true" aria-labelledby="cropTitle">
-    <div class="crop-backdrop" id="cropBackdrop"></div>
-    <div class="crop-dialog">
-      <div class="crop-header">
-        <div class="crop-title-group">
-          <h3 id="cropTitle">Adjust &amp; Crop Photo</h3>
-          <p class="crop-sub" id="cropSlotName">Drag to reposition or pinch/scroll to zoom</p>
-        </div>
-        <button class="crop-close" id="cropClose" type="button" aria-label="Close">&times;</button>
-      </div>
-      
-      <div class="crop-stage" id="cropStage">
-        <div class="crop-viewport" id="cropViewport">
-          <img id="cropImg" alt="Crop preview" src="">
-          <div class="crop-grid" aria-hidden="true"></div>
-        </div>
-      </div>
-
-      <div class="crop-controls">
-        <div class="crop-ctrl-row">
-          <span class="crop-ctrl-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35M8 11h6"/></svg> Zoom</span>
-          <input type="range" id="cropZoom" min="1" max="3" step="0.01" value="1" aria-label="Zoom photo">
-          <span class="crop-ctrl-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="crop-tools">
-          <button type="button" class="btn-crop-tool" id="cropRotate" title="Rotate 90 degrees">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-            <span>Rotate</span>
-          </button>
-          <button type="button" class="btn-crop-tool" id="cropFlip" title="Flip horizontally">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3m8-18h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3M12 2v20"/></svg>
-            <span>Flip</span>
-          </button>
-          <button type="button" class="btn-crop-tool" id="cropReset" title="Reset crop">
-            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-            <span>Reset</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="crop-actions">
-        <button type="button" class="btn-crop-cancel" id="cropCancel">Cancel</button>
-        <button type="button" class="btn-crop-save" id="cropSave">
-          <span class="crop-save-text">Crop &amp; Save</span>
-          <span class="crop-save-spinner" hidden></span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <script src="js/heic2any.js"></script>
-  <script src="js/browser-image-compression.js"></script>
-  <script src="js/cropper-modal.js"></script>
   <script src="js/index.js"></script>
 </body>
 

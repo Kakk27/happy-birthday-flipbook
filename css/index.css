@@ -6,3 +6,13 @@
 .single .leaf.turning {
   opacity: 1 !important;
 }
+
+/* User view on route /: photos are view-only, no upload hint or dashed border */
+.ph {
+  cursor: default !important;
+}
+
+.ph::after,
+.ph-hint {
+  display: none !important;
+}

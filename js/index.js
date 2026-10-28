@@ -17,21 +17,9 @@
     set: function (k, v, cb) { DB.open(function (db) { if (!db) return cb && cb(false); try { var tx = db.transaction('photos', 'readwrite'); tx.objectStore('photos').put(v, k); tx.oncomplete = function () { cb && cb(true) }; tx.onerror = function () { cb && cb(false) } } catch (e) { cb && cb(false) } }) }
   };
   DB.get('photos', function (val) { if (val && typeof val === 'object') { for (var k in val) if (val[k] && !photos[k]) photos[k] = val[k]; applyPhotos() } });
-  var saveTimer = null;
-  function syncToServer(patch) {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(function () {
-      fetch('/api/save', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(patch)
-      }).catch(function (err) { console.error('[Server Save Error]', err); });
-    }, 200);
-  }
   function savePhotos() {
     try { localStorage.setItem('flipbook-photos', JSON.stringify(photos)) } catch (e) { }
     DB.set('photos', photos);
-    syncToServer({ photos: photos });
   }
 
   var ones = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
@@ -42,15 +30,15 @@
   /* ---------- page templates ---------- */
   var tones = ['#b88a84', '#a89079', '#8f7b73', '#6f5a55', '#c4a58d', '#9c8573'];
   function toneFor(id) { var n = 0; for (var i = 0; i < id.length; i++)n += id.charCodeAt(i); return tones[n % tones.length] }
-  var HINT = '<span class="ph-hint"><b>+</b><i>Add photo</i></span>';
+  var HINT = '';
   function ph(id, l, t, w, h, o) {
     o = o || {};
-    return '<div class="ph' + (w < 30 ? ' sm' : '') + '" role="button" tabindex="0" data-id="' + id + '" aria-label="Add a photo" style="left:' + l + 'cqw;top:' + t + 'cqw;width:' + w + 'cqw;height:' + h + 'cqw;--tone:' + toneFor(id) + '">' + HINT + '</div>'
+    return '<div class="ph' + (w < 30 ? ' sm' : '') + '" data-id="' + id + '" aria-label="Photo" style="left:' + l + 'cqw;top:' + t + 'cqw;width:' + w + 'cqw;height:' + h + 'cqw;--tone:' + toneFor(id) + '"></div>'
   }
   function fr(id, l, t, w, h, o) {
     o = o || {}; var p = o.pad != null ? o.pad : 2.2, b = o.bottom != null ? o.bottom : p;
     return '<div class="fr" style="left:' + l + 'cqw;top:' + t + 'cqw;width:' + w + 'cqw;height:' + h + 'cqw;' + (o.rot ? 'transform:rotate(' + o.rot + 'deg);' : '') + (o.bg ? 'background:' + o.bg + ';' : '') + '">' +
-      '<div class="ph' + (w < 30 ? ' sm' : '') + '" role="button" tabindex="0" data-id="' + id + '" aria-label="Add a photo" style="left:' + p + 'cqw;top:' + p + 'cqw;right:' + p + 'cqw;bottom:' + b + 'cqw;--tone:' + toneFor(id) + '">' + HINT + '</div></div>'
+      '<div class="ph' + (w < 30 ? ' sm' : '') + '" data-id="' + id + '" aria-label="Photo" style="left:' + p + 'cqw;top:' + p + 'cqw;right:' + p + 'cqw;bottom:' + b + 'cqw;--tone:' + toneFor(id) + '"></div></div>'
   }
   function star(cls, l, t, s, r) { return '<i class="' + cls + '" style="left:' + l + 'cqw;top:' + t + 'cqw;width:' + s + 'cqw;height:' + s + 'cqw;' + (r ? 'transform:rotate(' + r + 'deg);' : '') + '"></i>' }
   function burst(n, R, r) { var p = []; for (var i = 0; i < n * 2; i++) { var a = Math.PI * i / n - Math.PI / 2, rad = i % 2 ? r : R; p.push((50 + rad * Math.cos(a)).toFixed(1) + ',' + (50 + rad * Math.sin(a)).toFixed(1)) } return p.join(' ') }
@@ -97,7 +85,7 @@
     /* 3 here */
     {
       cls: 'imgpage', html:
-        '<div class="fullimg ph" role="button" tabindex="0" data-id="page3" aria-label="Photo" style="background-image:url(assets/page3.jpg)">' + HINT + '</div>' +
+        '<div class="fullimg ph" data-id="page3" aria-label="Photo" style="background-image:url(assets/page3.jpg)"></div>' +
         '<p class="here-turn side"><b data-b="name"></b> is turning<br><span data-b="ageWords"></span></p>'
     },
     /* 4 calendar */
@@ -370,7 +358,6 @@
   stage.addEventListener('pointercancel', function () { down = false });
   stage.addEventListener('click', function (e) {
     if (moved) { moved = false; return }
-    if (e.target.closest('.ph')) return;
     var r = book.getBoundingClientRect(), x = e.clientX - r.left;
     if (mode === 'spread') { x > r.width / 2 ? next() : prev() }
     else { x > r.width * 0.4 ? next() : prev() }
@@ -383,61 +370,6 @@
     else if (e.key === 'Home') { goTo(minS) }
     else if (e.key === 'End') { goTo(maxS) }
   });
-
-  /* ---------- photos ---------- */
-  var fileIn = $('#file'), slot = null;
-  function pick(el) { slot = el.getAttribute('data-id'); if (fileIn) { fileIn.value = ''; fileIn.click() } }
-  book.addEventListener('click', function (e) { var p = e.target.closest('.ph'); if (p) { e.stopPropagation(); pick(p) } });
-  book.addEventListener('keydown', function (e) { var p = e.target.closest && e.target.closest('.ph'); if (p && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pick(p) } });
-  function uploadPhotoBlob(id, body, filename) {
-    fetch('/api/upload-image', {
-      method: 'POST',
-      headers: {
-        'Content-Type': (body && body.type) || 'image/jpeg',
-        'X-Slot': id,
-        'X-Filename': encodeURIComponent(filename || (id + '.jpg'))
-      },
-      body: body
-    })
-      .then(function (res) {
-        if (!res.ok) throw new Error('Image upload failed');
-        return res.json();
-      })
-      .then(function (data) {
-        photos[id] = data.url;
-        savePhotos();
-        applyPhotos();
-      })
-      .catch(function (err) {
-        console.error('[Image Upload Error]', err);
-        savePhotos();
-      });
-  }
-
-  if (fileIn) {
-    fileIn.addEventListener('change', function () {
-      var f = fileIn.files && fileIn.files[0]; if (!f || !slot) return; var id = slot;
-
-      if (window.CropperModal) {
-        window.CropperModal.open({
-          file: f,
-          slot: id,
-          onCrop: function (blob, previewUrl) {
-            if (previewUrl) {
-              photos[id] = previewUrl;
-              applyPhotos();
-            }
-            uploadPhotoBlob(id, blob, f.name || (id + '.jpg'));
-          },
-          onCancel: function () {
-            fileIn.value = '';
-          }
-        });
-      } else {
-        uploadPhotoBlob(id, f, f.name || (id + '.jpg'));
-      }
-    });
-  }
 
   /* ---------- sound ---------- */
   var A = { track: 'custom', vol: .6, music: true, sfx: true, customTrack: '/audio/audio-wedding_1793132271515.mp3', customTrackName: 'audio-wedding.mp3' };
@@ -693,16 +625,6 @@
           if (data.photos[pid]) photos[pid] = data.photos[pid];
         }
         applyPhotos();
-      }
-      var unsynced = false;
-      for (var k in photos) {
-        if (photos[k] && (!data.photos || !data.photos[k])) {
-          unsynced = true;
-          break;
-        }
-      }
-      if (unsynced) {
-        syncToServer({ photos: photos });
       }
       if (typeof data.lock === 'boolean') {
         LOCK = data.lock;
