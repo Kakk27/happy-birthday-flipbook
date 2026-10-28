@@ -416,37 +416,7 @@
   customAudio.preload = 'auto';
   if(A.customTrack) customAudio.src = A.customTrack;
 
-  /* ── Attempt autoplay immediately on load ─────────────────────────────── */
-  var autoplayHint = document.getElementById('autoplay-hint');
-  function hideHint(){ if(autoplayHint){ autoplayHint.classList.add('hidden'); } }
-
-  function tryAutoplay(){
-    if(!A.music || A.track==='off') return;
-    if(A.track==='custom' && A.customTrack){
-      customAudio.volume = 0; // start muted to bypass some policies
-      customAudio.play().then(function(){
-        // Fade in volume smoothly
-        var target = Math.max(0, Math.min(1, A.vol));
-        var step = target / 20;
-        var fade = setInterval(function(){
-          customAudio.volume = Math.min(target, customAudio.volume + step);
-          if(customAudio.volume >= target) clearInterval(fade);
-        }, 50);
-        playing = true;
-        hideHint();
-        updSound();
-      }).catch(function(){
-        // Browser blocked autoplay — show hint, wait for first interaction
-        if(autoplayHint) autoplayHint.classList.remove('hidden');
-      });
-    }
-  }
-  // Try immediately, and also after metadata is loaded
-  tryAutoplay();
-  customAudio.addEventListener('loadedmetadata', function(){ if(!playing) tryAutoplay(); });
-  /* ─────────────────────────────────────────────────────────────────────── */
-
-
+  var AC=null,master,musicBus,sfxBus,reverb,rvSend,noiseBuf,trackNode=null,timer=null,playing=false,lastSfx=0;
   var soundB=$('#sound');
   var ICON_ON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg>';
   var ICON_OFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9.5l5 5M22 9.5l-5 5"/></svg>';
@@ -588,7 +558,37 @@
     var pent=[79,81,84,86,88,91];voice(sfxBus,t+.3,pent[Math.floor(Math.random()*pent.length)],.3,'bell',.1);
   }
 
-  /* start on the first tap, since browsers block sound before that */
+  /* ── Autoplay: try immediately, show tap-prompt if blocked ── */
+  var _tapOverlay = null;
+  function showTapPrompt(){
+    if(_tapOverlay) return;
+    _tapOverlay = document.createElement('div');
+    _tapOverlay.id = 'tap-to-play';
+    _tapOverlay.innerHTML = '<span class="tap-icon">🎵</span><span class="tap-text">Tap anywhere to play music</span>';
+    _tapOverlay.style.cssText = [
+      'position:fixed','bottom:24px','left:50%','transform:translateX(-50%)',
+      'background:rgba(0,0,0,0.6)','backdrop-filter:blur(10px)',
+      '-webkit-backdrop-filter:blur(10px)',
+      'color:#fff','font-family:inherit','font-size:13px','font-weight:500',
+      'padding:10px 20px','border-radius:100px',
+      'display:flex','align-items:center','gap:8px',
+      'pointer-events:none','z-index:9999',
+      'animation:_tapFadeIn .4s ease both',
+      'box-shadow:0 4px 24px rgba(0,0,0,0.4)'
+    ].join(';');
+    var style = document.createElement('style');
+    style.textContent = '@keyframes _tapFadeIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}} @keyframes _tapPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}} #tap-to-play .tap-icon{animation:_tapPulse 1.2s ease-in-out infinite}';
+    document.head.appendChild(style);
+    document.body.appendChild(_tapOverlay);
+  }
+  function hideTapPrompt(){
+    if(_tapOverlay){
+      _tapOverlay.style.transition='opacity .3s';
+      _tapOverlay.style.opacity='0';
+      setTimeout(function(){if(_tapOverlay){_tapOverlay.remove();_tapOverlay=null;}},350);
+    }
+  }
+
   var EVS=['pointerdown','touchend','click','keydown'];
   function unlock(){if(AC&&AC.state!=='running'){try{AC.resume()}catch(e){}}}
   function detach(){EVS.forEach(function(n){window.removeEventListener(n,onFirst,true)})}
@@ -596,9 +596,9 @@
     if(e.target&&e.target.closest&&e.target.closest('#sound'))return;
     ensureAudio();
     unlock();
+    hideTapPrompt();
     if(A.music&&A.track!=='off'){
       startMusic();
-      hideHint();
     }
     if((customAudio&&!customAudio.paused)||(AC&&AC.state==='running')){
       detach();
@@ -636,12 +636,21 @@
     }
   });
 
-  updSound();
+  /* ── Try autoplay immediately on load ── */
   setTimeout(function(){
-    if(A.music&&A.track!=='off'&&!playing){
-      startMusic();
+    if(!A.music || A.track==='off') return;
+    var tryPlay = customAudio.play();
+    if(tryPlay && tryPlay.then){
+      tryPlay.then(function(){
+        playing = true;
+        hideTapPrompt();
+        updSound();
+      }).catch(function(){
+        // Browser blocked autoplay — show tap prompt
+        showTapPrompt();
+      });
     }
-  },500);
+  }, 300);
 
   fit();
 
