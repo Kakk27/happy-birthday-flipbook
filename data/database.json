@@ -9,7 +9,8 @@
   },
   "photos": {
     "letter": "/image/letter_1793142257651.jpg",
-    "p5a": "/image/p5a_1793142277415.jpg"
+    "p5a": "/image/p5a_1793142277415.jpg",
+    "test_slot": "/image/test_slot_1793141199472.png"
   },
   "audio": {
     "track": "custom",
@@ -20,5 +21,5 @@
     "customTrackName": "audio-wedding.mp3"
   },
   "lock": false,
-  "updatedAt": 1793142277633
+  "updatedAt": 1793214462349
 }
