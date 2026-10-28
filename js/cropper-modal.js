@@ -48,6 +48,7 @@
       subTitle = null;
 
   var currentImg = null;
+  var imgGhostEl = null;
   var currentCb = null;
   var currentCancelCb = null;
   var targetAspect = 1;
@@ -91,6 +92,26 @@
     flipBtn = document.getElementById('cropFlip');
     resetBtn = document.getElementById('cropReset');
     subTitle = document.getElementById('cropSlotName');
+
+    // Create ghost image behind the frame in stage so full image is visible
+    var ghost = document.getElementById('cropImgGhost');
+    if(!ghost && stage){
+      ghost = document.createElement('img');
+      ghost.id = 'cropImgGhost';
+      ghost.className = 'crop-img-ghost';
+      ghost.alt = '';
+      stage.insertBefore(ghost, viewport);
+    }
+    imgGhostEl = ghost;
+
+    // Add four corner bracket markers inside viewport
+    if(viewport && !viewport.querySelector('.crop-corner')){
+      ['tl', 'tr', 'bl', 'br'].forEach(function(c){
+        var corner = document.createElement('div');
+        corner.className = 'crop-corner ' + c;
+        viewport.appendChild(corner);
+      });
+    }
 
     if(closeBtn) closeBtn.addEventListener('click', close);
     if(cancelBtn) cancelBtn.addEventListener('click', close);
@@ -137,6 +158,14 @@
       viewport.addEventListener('pointerup', onPointerUp);
       viewport.addEventListener('pointercancel', onPointerUp);
       viewport.addEventListener('wheel', onWheel, { passive: false });
+    }
+
+    if(stage){
+      stage.addEventListener('pointerdown', onPointerDown);
+      stage.addEventListener('pointermove', onPointerMove);
+      stage.addEventListener('pointerup', onPointerUp);
+      stage.addEventListener('pointercancel', onPointerUp);
+      stage.addEventListener('wheel', onWheel, { passive: false });
     }
 
     if(saveBtn){
@@ -241,9 +270,19 @@
     var centerX = (vpW - nw) / 2 + posX;
     var centerY = (vpH - nh) / 2 + posY;
 
-    imgEl.style.transform = 'translate(' + centerX + 'px, ' + centerY + 'px) ' +
-                            'rotate(' + rotation + 'deg) ' +
-                            'scale(' + (totalScale * flipH) + ', ' + totalScale + ')';
+    var tf = 'translate(' + centerX + 'px, ' + centerY + 'px) ' +
+             'rotate(' + rotation + 'deg) ' +
+             'scale(' + (totalScale * flipH) + ', ' + totalScale + ')';
+    imgEl.style.transform = tf;
+
+    if(imgGhostEl && stage){
+      var offsetX = (stage.clientWidth - vpW) / 2;
+      var offsetY = (stage.clientHeight - vpH) / 2;
+      var ghostTf = 'translate(' + (offsetX + centerX) + 'px, ' + (offsetY + centerY) + 'px) ' +
+                    'rotate(' + rotation + 'deg) ' +
+                    'scale(' + (totalScale * flipH) + ', ' + totalScale + ')';
+      imgGhostEl.style.transform = ghostTf;
+    }
   }
 
   function setupViewportDimensions(aspect){
@@ -332,6 +371,12 @@
         imgEl.src = fr.result;
         imgEl.style.width = img.naturalWidth + 'px';
         imgEl.style.height = img.naturalHeight + 'px';
+
+        if(imgGhostEl){
+          imgGhostEl.src = fr.result;
+          imgGhostEl.style.width = img.naturalWidth + 'px';
+          imgGhostEl.style.height = img.naturalHeight + 'px';
+        }
 
         modal.hidden = false;
 
