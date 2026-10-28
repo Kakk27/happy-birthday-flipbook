@@ -126,8 +126,6 @@ body {
 }
 
 .btn-soft:focus-visible,
-.sound:focus-visible,
-.fs-btn:focus-visible,
 .rb:focus-visible,
 .dot:focus-visible,
 .ph:focus-visible,
@@ -1174,8 +1172,7 @@ body {
   gap: 10px
 }
 
-.sound,
-.fs-btn {
+.sound {
   width: 42px;
   height: 42px;
   border-radius: 50%;
@@ -1185,26 +1182,15 @@ body {
   display: grid;
   place-items: center;
   cursor: pointer;
-  flex: none;
-  transition: background .2s, color .2s, transform .15s;
+  flex: none
 }
 
-.fs-btn:hover {
-  background: rgba(90, 14, 18, .08);
-}
-
-.fs-btn:active {
-  transform: scale(.94);
-}
-
-.sound svg,
-.fs-btn svg {
+.sound svg {
   width: 20px;
   height: 20px
 }
 
-.sound.on,
-.fs-btn.on {
+.sound.on {
   background: var(--maroon);
   color: var(--paper)
 }
@@ -1486,14 +1472,12 @@ body {
   }
 
   .top .sound,
-  .top .fs-btn,
   .top .btn-soft {
     min-height: 38px;
     height: 38px
   }
 
-  .top .sound,
-  .top .fs-btn {
+  .top .sound {
     width: 38px
   }
 
