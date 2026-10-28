@@ -142,6 +142,14 @@
     if(saveBtn){
       saveBtn.addEventListener('click', onSave);
     }
+
+    window.addEventListener('resize', function(){
+      if(modal && !modal.hidden && currentImg){
+        setupViewportDimensions(targetAspect);
+        recalculateBase();
+        applyTransform();
+      }
+    });
   }
 
   function onPointerDown(e){
@@ -240,8 +248,13 @@
 
   function setupViewportDimensions(aspect){
     if(!stage || !viewport) return;
-    var maxW = Math.min(380, stage.clientWidth - 32);
-    var maxH = Math.min(320, stage.clientHeight - 32);
+    var rect = stage.getBoundingClientRect();
+    var availW = rect.width > 80 ? rect.width : (window.innerWidth * 0.9);
+    var availH = rect.height > 80 ? rect.height : (window.innerHeight * 0.6);
+
+    // Provide a much larger, generous crop area for clear previewing
+    var maxW = Math.min(820, Math.max(260, availW - 32));
+    var maxH = Math.min(560, Math.max(240, availH - 32));
 
     if(aspect >= 1){
       vpW = maxW;
@@ -259,8 +272,8 @@
       }
     }
 
-    vpW = Math.max(120, vpW);
-    vpH = Math.max(80, vpH);
+    vpW = Math.max(160, Math.round(vpW));
+    vpH = Math.max(120, Math.round(vpH));
 
     viewport.style.width = vpW + 'px';
     viewport.style.height = vpH + 'px';
@@ -320,17 +333,20 @@
         imgEl.style.width = img.naturalWidth + 'px';
         imgEl.style.height = img.naturalHeight + 'px';
 
-        setupViewportDimensions(targetAspect);
-        userScale = 1;
-        if(zoomIn) zoomIn.value = '1';
-        posX = 0;
-        posY = 0;
-        rotation = 0;
-        flipH = 1;
-        recalculateBase();
-        applyTransform();
-
         modal.hidden = false;
+
+        // Ensure DOM has rendered visible stage so getBoundingClientRect reflects true size
+        requestAnimationFrame(function(){
+          setupViewportDimensions(targetAspect);
+          userScale = 1;
+          if(zoomIn) zoomIn.value = '1';
+          posX = 0;
+          posY = 0;
+          rotation = 0;
+          flipH = 1;
+          recalculateBase();
+          applyTransform();
+        });
       };
       img.onerror = function(){
         alert('Could not decode image format. Please select a JPEG or PNG file.');
