@@ -110,8 +110,6 @@
       '<span style="left:8cqw;top:47cqw">you</span><span style="left:25cqw;top:57cqw">and</span>'+
       '<span style="left:10cqw;top:68cqw">your</span><span style="left:34cqw;top:79cqw">new</span>'+
       '<span style="left:8cqw;top:93cqw">chapter</span></div>'+
-    '<svg viewBox="0 0 40 34" style="left:8cqw;top:112cqw;width:13cqw" aria-hidden="true"><path d="M4 26V10M4 13q0-7 6-7t6 7v13M16 13q0-7 6-7t6 7v12q0 4 4 4h3" fill="none" stroke="#1f2c47" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M31 24l5 5-5 5" fill="none" stroke="#1f2c47" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
-    '<p style="left:24cqw;top:118cqw;font-size:3cqw;letter-spacing:.3em;text-transform:uppercase;color:#1f2c47">Scorpio</p>'+
     '<i class="st" style="color:#5a0e12;left:84cqw;top:56cqw;width:5cqw;height:5cqw"></i>'},
   /* 9 scattered */
   {cls:'maroon',html:
