@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign in · clever</title>
+  <title>Sign in</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -29,8 +29,8 @@
     /* ── Main Container Card ── */
     .login-card {
       width: 100%;
-      max-width: 1040px;
-      min-height: 640px;
+      max-width: 980px;
+      min-height: 580px;
       background: #ffffff;
       border-radius: 28px;
       padding: 16px;
@@ -40,81 +40,13 @@
       position: relative;
     }
 
-    /* ── Left Hero / Dunes Panel ── */
+    /* ── Left Hero / Dunes Panel (Clean image only) ── */
     .hero-panel {
       position: relative;
       border-radius: 20px;
       background: #111827 url('image/login-banner.jpg') center center / cover no-repeat;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 36px 32px;
-      color: #ffffff;
-      min-height: 600px;
-    }
-
-    .hero-panel::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.05) 40%, rgba(0, 0, 0, 0.65) 100%);
-      pointer-events: none;
-    }
-
-    .brand-wrap {
-      position: relative;
-      z-index: 1;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-
-    .brand-icon-box {
-      width: 34px;
-      height: 34px;
-      background: #ffffff;
-      border-radius: 8px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .brand-icon-box svg {
-      width: 18px;
-      height: 18px;
-      fill: #111827;
-    }
-
-    .brand-name {
-      font-size: 1.15rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: #ffffff;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 340px;
-    }
-
-    .hero-title {
-      font-size: 2.15rem;
-      font-weight: 700;
-      line-height: 1.18;
-      letter-spacing: -0.03em;
-      margin-bottom: 14px;
-      color: #ffffff;
-    }
-
-    .hero-subtext {
-      font-size: 0.88rem;
-      line-height: 1.55;
-      color: rgba(255, 255, 255, 0.78);
-      font-weight: 400;
+      min-height: 540px;
     }
 
     /* ── Right Form Panel ── */
@@ -122,7 +54,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px 32px;
+      padding: 40px 36px;
     }
 
     .form-wrapper {
@@ -135,7 +67,7 @@
     }
 
     .form-title {
-      font-size: 1.65rem;
+      font-size: 1.75rem;
       font-weight: 700;
       letter-spacing: -0.025em;
       color: #111827;
@@ -149,7 +81,8 @@
     }
 
     .field-group {
-      margin-bottom: 18px;
+      margin-bottom: 20px;
+      position: relative;
     }
 
     .field-label {
@@ -157,38 +90,24 @@
       font-size: 0.825rem;
       font-weight: 600;
       color: #1f2937;
-      margin-bottom: 7px;
+      margin-bottom: 8px;
     }
 
-    .field-row {
+    .input-wrap {
+      position: relative;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 7px;
-    }
-
-    .field-link {
-      font-size: 0.8rem;
-      color: #6b7280;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.15s ease;
-    }
-
-    .field-link:hover {
-      color: #111827;
-      text-decoration: underline;
     }
 
     .input-control {
       width: 100%;
-      height: 44px;
+      height: 46px;
       background: #ffffff;
       border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 0 14px;
+      border-radius: 10px;
+      padding: 0 44px 0 14px;
       font-family: inherit;
-      font-size: 0.875rem;
+      font-size: 0.92rem;
       color: #111827;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
@@ -209,169 +128,50 @@
       background: #fef2f2;
     }
 
-    /* ── Checkbox Row ── */
-    .checkbox-row {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      margin-top: 14px;
-      margin-bottom: 22px;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .custom-checkbox {
-      width: 16px;
-      height: 16px;
-      border: 1.5px solid #d1d5db;
-      border-radius: 4px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #ffffff;
-      transition: all 0.15s ease;
-      flex-shrink: 0;
-    }
-
-    .checkbox-input {
-      display: none;
-    }
-
-    .checkbox-input:checked + .custom-checkbox {
-      background: #111827;
-      border-color: #111827;
-    }
-
-    .custom-checkbox svg {
-      display: none;
-      width: 11px;
-      height: 11px;
-      stroke: #ffffff;
-      stroke-width: 2.5;
-    }
-
-    .checkbox-input:checked + .custom-checkbox svg {
-      display: block;
-    }
-
-    .checkbox-label {
-      font-size: 0.825rem;
-      color: #4b5563;
-      font-weight: 500;
-    }
-
-    /* ── Submit Button ── */
-    .btn-submit {
-      width: 100%;
-      height: 44px;
-      background: #0f172a;
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 0.875rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.15s ease, transform 0.1s ease;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-    }
-
-    .btn-submit:hover:not(:disabled) {
-      background: #1e293b;
-    }
-
-    .btn-submit:active:not(:disabled) {
-      transform: scale(0.99);
-    }
-
-    .btn-submit:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
-    /* ── OR Divider ── */
-    .divider {
-      position: relative;
-      text-align: center;
-      margin: 22px 0 18px;
-    }
-
-    .divider::before {
-      content: '';
+    /* Eye toggle icon */
+    .toggle-pw {
       position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: #e5e7eb;
+      right: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #9ca3af;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s;
     }
 
-    .divider-text {
-      position: relative;
-      z-index: 1;
-      background: #ffffff;
-      padding: 0 10px;
+    .toggle-pw:hover {
+      color: #111827;
+    }
+
+    .toggle-pw svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    /* Subtle enter hint */
+    .enter-hint {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: #9ca3af;
+      margin-top: 10px;
+      padding-left: 2px;
+    }
+
+    .kbd-chip {
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 2px 6px;
       font-size: 0.72rem;
       font-weight: 600;
       color: #6b7280;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    /* ── Social Buttons ── */
-    .social-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .btn-social {
-      height: 42px;
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
       font-family: inherit;
-      font-size: 0.835rem;
-      font-weight: 600;
-      color: #374151;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background-color 0.15s ease, border-color 0.15s ease;
-    }
-
-    .btn-social:hover {
-      background: #f9fafb;
-      border-color: #d1d5db;
-    }
-
-    .btn-social svg {
-      width: 17px;
-      height: 17px;
-    }
-
-    /* ── Footer ── */
-    .form-footer {
-      text-align: center;
-      font-size: 0.815rem;
-      color: #6b7280;
-      margin-top: 24px;
-    }
-
-    .form-footer a {
-      color: #4f46e5;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .form-footer a:hover {
-      text-decoration: underline;
     }
 
     /* ── Error notification banner ── */
@@ -397,29 +197,6 @@
       75% { transform: translateX(5px); }
     }
 
-    /* ── Spinner ── */
-    .spinner {
-      display: none;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255, 255, 255, 0.35);
-      border-top-color: #ffffff;
-      border-radius: 50%;
-      animation: spin 0.65s linear infinite;
-    }
-
-    .btn-submit.loading .btn-text {
-      display: none;
-    }
-
-    .btn-submit.loading .spinner {
-      display: block;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
     /* ── Responsive ── */
     @media (max-width: 860px) {
       .login-card {
@@ -430,16 +207,11 @@
       }
 
       .hero-panel {
-        min-height: 260px;
-        padding: 24px;
-      }
-
-      .hero-title {
-        font-size: 1.55rem;
+        min-height: 220px;
       }
 
       .form-panel {
-        padding: 32px 16px 20px;
+        padding: 32px 16px 24px;
       }
     }
   </style>
@@ -447,23 +219,8 @@
 <body>
 
   <div class="login-card">
-    <!-- Left Hero Image Panel -->
-    <div class="hero-panel">
-      <div class="brand-wrap">
-        <div class="brand-icon-box">
-          <!-- Clever lightning badge icon -->
-          <svg viewBox="0 0 24 24">
-            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-          </svg>
-        </div>
-        <span class="brand-name">clever</span>
-      </div>
-
-      <div class="hero-content">
-        <h2 class="hero-title">Build something<br>amazing today.</h2>
-        <p class="hero-subtext">Maybe some text here will help me see it better.</p>
-      </div>
-    </div>
+    <!-- Left Hero Image Panel (Clean monochrome dunes) -->
+    <div class="hero-panel"></div>
 
     <!-- Right Sign In Form Panel -->
     <div class="form-panel">
@@ -476,85 +233,34 @@
         <div class="alert-error" id="errorBanner">Incorrect password. Please try again.</div>
 
         <form id="signInForm" autocomplete="on">
-          <!-- Email Field -->
-          <div class="field-group">
-            <label class="field-label" for="email">Email address</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              class="input-control"
-              placeholder="Your email address"
-              value="admin@clever.com"
-              autocomplete="username"
-              required
-            />
-          </div>
-
           <!-- Password Field -->
           <div class="field-group">
-            <div class="field-row">
-              <label class="field-label" for="password" style="margin-bottom:0;">Password</label>
-              <a href="#" class="field-link" id="forgotLink">Forgot password?</a>
+            <label class="field-label" for="password">Password</label>
+            <div class="input-wrap">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="input-control"
+                placeholder="Password"
+                autocomplete="current-password"
+                autofocus
+                required
+              />
+              <button type="button" class="toggle-pw" id="togglePw" aria-label="Toggle password visibility">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
             </div>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              class="input-control"
-              placeholder="Password"
-              autocomplete="current-password"
-              autofocus
-              required
-            />
+            <div class="enter-hint">
+              <span>Press</span>
+              <span class="kbd-chip">Enter ↵</span>
+              <span>to unlock</span>
+            </div>
           </div>
-
-          <!-- Keep me logged in -->
-          <label class="checkbox-row" for="remember">
-            <input type="checkbox" id="remember" class="checkbox-input" checked />
-            <span class="custom-checkbox">
-              <svg viewBox="0 0 24 24" fill="none">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </span>
-            <span class="checkbox-label">Keep me logged in</span>
-          </label>
-
-          <!-- Submit Button -->
-          <button type="submit" class="btn-submit" id="submitBtn">
-            <span class="btn-text">Sign in</span>
-            <span class="spinner"></span>
-          </button>
         </form>
-
-        <!-- OR Divider -->
-        <div class="divider">
-          <span class="divider-text">OR</span>
-        </div>
-
-        <!-- Social Buttons -->
-        <div class="social-grid">
-          <button type="button" class="btn-social" id="githubBtn">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-            </svg>
-            <span>GitHub</span>
-          </button>
-          <button type="button" class="btn-social" id="googleBtn">
-            <svg viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
-              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
-              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-            </svg>
-            <span>Google</span>
-          </button>
-        </div>
-
-        <!-- Footer -->
-        <p class="form-footer">
-          Don't have an account? <a href="#" id="signUpLink">Sign up</a>
-        </p>
       </div>
     </div>
   </div>
@@ -562,21 +268,31 @@
   <script>
     const form = document.getElementById('signInForm');
     const pwInput = document.getElementById('password');
-    const submitBtn = document.getElementById('submitBtn');
     const errorBanner = document.getElementById('errorBanner');
+    const togglePw = document.getElementById('togglePw');
+
+    // Toggle password visibility
+    togglePw.addEventListener('click', () => {
+      const isText = pwInput.type === 'text';
+      pwInput.type = isText ? 'password' : 'text';
+      togglePw.innerHTML = isText
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+    });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const val = pwInput.value.trim();
+      if (!val) return;
+
       errorBanner.classList.remove('show');
       pwInput.classList.remove('error');
-      submitBtn.classList.add('loading');
-      submitBtn.disabled = true;
 
       try {
         const res = await fetch('/api/admin-login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password: pwInput.value.trim() })
+          body: JSON.stringify({ password: val })
         });
 
         if (res.ok) {
@@ -592,21 +308,6 @@
       } catch (err) {
         errorBanner.textContent = 'Network error. Please try again.';
         errorBanner.classList.add('show');
-      } finally {
-        submitBtn.classList.remove('loading');
-        submitBtn.disabled = false;
-      }
-    });
-
-    // Helper for demo links
-    ['forgotLink', 'signUpLink', 'githubBtn', 'googleBtn'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.addEventListener('click', (e) => {
-          e.preventDefault();
-          alert('Admin access requires entering the admin password in the password field.');
-          pwInput.focus();
-        });
       }
     });
   </script>
