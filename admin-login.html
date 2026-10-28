@@ -3,300 +3,610 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Login · Birthday Flipbook</title>
+  <title>Sign in · clever</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --pink:    #ff6b9d;
-      --rose:    #ff4d8d;
-      --purple:  #c084fc;
-      --bg:      #0d0a12;
-      --card:    rgba(255,255,255,0.05);
-      --border:  rgba(255,255,255,0.10);
-      --text:    #f0e6ff;
-      --muted:   rgba(240,230,255,0.45);
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      font-family: 'Outfit', sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #eceef2;
+      color: #111827;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Main Container Card ── */
+    .login-card {
+      width: 100%;
+      max-width: 1040px;
+      min-height: 640px;
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.03);
+      display: grid;
+      grid-template-columns: 430px 1fr;
+      position: relative;
+    }
+
+    /* ── Left Hero / Dunes Panel ── */
+    .hero-panel {
+      position: relative;
+      border-radius: 20px;
+      background: #111827 url('image/login-banner.jpg') center center / cover no-repeat;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 36px 32px;
+      color: #ffffff;
+      min-height: 600px;
     }
 
-    /* ── Animated background ── */
-    .bg-orbs {
-      position: fixed; inset: 0; pointer-events: none; z-index: 0;
-    }
-    .orb {
+    .hero-panel::before {
+      content: '';
       position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.35;
-      animation: drift 12s ease-in-out infinite alternate;
-    }
-    .orb-1 { width: 420px; height: 420px; background: #ff6b9d; top: -10%; left: -10%; animation-duration: 14s; }
-    .orb-2 { width: 350px; height: 350px; background: #c084fc; bottom: -5%; right: -5%; animation-duration: 18s; animation-delay: -4s; }
-    .orb-3 { width: 240px; height: 240px; background: #ff9a3c; top: 40%; left: 60%; animation-duration: 10s; animation-delay: -8s; }
-
-    @keyframes drift {
-      from { transform: translate(0, 0) scale(1); }
-      to   { transform: translate(30px, -30px) scale(1.08); }
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.05) 40%, rgba(0, 0, 0, 0.65) 100%);
+      pointer-events: none;
     }
 
-    /* ── Card ── */
-    .card {
-      position: relative; z-index: 1;
-      width: min(420px, 92vw);
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      padding: 48px 40px 40px;
-      box-shadow: 0 8px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
-      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+    .brand-wrap {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px) scale(0.97); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
+    .brand-icon-box {
+      width: 34px;
+      height: 34px;
+      background: #ffffff;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
-    /* ── Icon ── */
-    .icon-wrap {
-      width: 64px; height: 64px;
-      background: linear-gradient(135deg, var(--pink), var(--purple));
-      border-radius: 18px;
-      display: grid; place-items: center;
-      margin: 0 auto 24px;
-      box-shadow: 0 4px 24px rgba(255,107,157,0.4);
-      font-size: 28px;
-      animation: float 3s ease-in-out infinite;
+    .brand-icon-box svg {
+      width: 18px;
+      height: 18px;
+      fill: #111827;
     }
 
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-6px); }
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 1.6rem;
+    .brand-name {
+      font-size: 1.15rem;
       font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 340px;
+    }
+
+    .hero-title {
+      font-size: 2.15rem;
+      font-weight: 700;
+      line-height: 1.18;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+      color: #ffffff;
+    }
+
+    .hero-subtext {
+      font-size: 0.88rem;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.78);
+      font-weight: 400;
+    }
+
+    /* ── Right Form Panel ── */
+    .form-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 32px;
+    }
+
+    .form-wrapper {
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .form-header {
+      margin-bottom: 28px;
+    }
+
+    .form-title {
+      font-size: 1.65rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: #111827;
       margin-bottom: 6px;
-      background: linear-gradient(135deg, #fff 30%, var(--purple));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
 
-    .subtitle {
-      text-align: center;
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 36px;
+    .form-subtitle {
+      font-size: 0.875rem;
+      color: #6b7280;
+      font-weight: 400;
     }
 
-    /* ── Form ── */
-    .field { position: relative; margin-bottom: 20px; }
+    .field-group {
+      margin-bottom: 18px;
+    }
 
-    .field label {
+    .field-label {
       display: block;
-      font-size: 0.8rem;
+      font-size: 0.825rem;
       font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
+      color: #1f2937;
+      margin-bottom: 7px;
     }
 
-    .field input {
+    .field-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+
+    .field-link {
+      font-size: 0.8rem;
+      color: #6b7280;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.15s ease;
+    }
+
+    .field-link:hover {
+      color: #111827;
+      text-decoration: underline;
+    }
+
+    .input-control {
       width: 100%;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 48px 14px 16px;
-      color: var(--text);
+      height: 44px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 0 14px;
       font-family: inherit;
-      font-size: 1rem;
+      font-size: 0.875rem;
+      color: #111827;
       outline: none;
-      transition: border-color 0.25s, box-shadow 0.25s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
-    .field input:focus {
-      border-color: var(--pink);
-      box-shadow: 0 0 0 3px rgba(255,107,157,0.18);
+    .input-control::placeholder {
+      color: #9ca3af;
+      font-weight: 400;
     }
 
-    .toggle-pw {
-      position: absolute; right: 14px; top: 42px;
-      background: none; border: none; cursor: pointer;
-      color: var(--muted); font-size: 1.1rem;
-      transition: color 0.2s;
-      padding: 0; line-height: 1;
+    .input-control:focus {
+      border-color: #111827;
+      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
     }
-    .toggle-pw:hover { color: var(--text); }
 
-    /* ── Error ── */
-    .error-msg {
+    .input-control.error {
+      border-color: #ef4444;
+      background: #fef2f2;
+    }
+
+    /* ── Checkbox Row ── */
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 14px;
+      margin-bottom: 22px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .custom-checkbox {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .checkbox-input {
       display: none;
-      background: rgba(255,80,80,0.15);
-      border: 1px solid rgba(255,80,80,0.35);
-      border-radius: 10px;
-      color: #ff8080;
-      font-size: 0.85rem;
-      padding: 10px 14px;
-      margin-bottom: 16px;
-      text-align: center;
-      animation: shake 0.35s ease;
-    }
-    .error-msg.show { display: block; }
-
-    @keyframes shake {
-      0%,100% { transform: translateX(0); }
-      25%      { transform: translateX(-6px); }
-      75%      { transform: translateX(6px); }
     }
 
-    /* ── Button ── */
-    .btn-login {
+    .checkbox-input:checked + .custom-checkbox {
+      background: #111827;
+      border-color: #111827;
+    }
+
+    .custom-checkbox svg {
+      display: none;
+      width: 11px;
+      height: 11px;
+      stroke: #ffffff;
+      stroke-width: 2.5;
+    }
+
+    .checkbox-input:checked + .custom-checkbox svg {
+      display: block;
+    }
+
+    .checkbox-label {
+      font-size: 0.825rem;
+      color: #4b5563;
+      font-weight: 500;
+    }
+
+    /* ── Submit Button ── */
+    .btn-submit {
       width: 100%;
-      padding: 15px;
+      height: 44px;
+      background: #0f172a;
+      color: #ffffff;
       border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--rose), var(--purple));
-      color: #fff;
+      border-radius: 8px;
       font-family: inherit;
-      font-size: 1rem;
+      font-size: 0.875rem;
       font-weight: 600;
       cursor: pointer;
-      letter-spacing: 0.03em;
-      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-      box-shadow: 0 4px 20px rgba(255,77,141,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.15s ease, transform 0.1s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      background: #1e293b;
+    }
+
+    .btn-submit:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    /* ── OR Divider ── */
+    .divider {
       position: relative;
-      overflow: hidden;
-    }
-
-    .btn-login::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: rgba(255,255,255,0.12);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    .btn-login:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,77,141,0.5); }
-    .btn-login:hover:not(:disabled)::after { opacity: 1; }
-    .btn-login:active:not(:disabled) { transform: translateY(0); }
-    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    .btn-login .spinner {
-      display: none;
-      width: 18px; height: 18px;
-      border: 2px solid rgba(255,255,255,0.4);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      margin: 0 auto;
-    }
-    .btn-login.loading .btn-text { display: none; }
-    .btn-login.loading .spinner  { display: block; }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .footer-note {
       text-align: center;
-      font-size: 0.75rem;
-      color: var(--muted);
+      margin: 22px 0 18px;
+    }
+
+    .divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #e5e7eb;
+    }
+
+    .divider-text {
+      position: relative;
+      z-index: 1;
+      background: #ffffff;
+      padding: 0 10px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #6b7280;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ── Social Buttons ── */
+    .social-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn-social {
+      height: 42px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+      font-size: 0.835rem;
+      font-weight: 600;
+      color: #374151;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn-social:hover {
+      background: #f9fafb;
+      border-color: #d1d5db;
+    }
+
+    .btn-social svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    /* ── Footer ── */
+    .form-footer {
+      text-align: center;
+      font-size: 0.815rem;
+      color: #6b7280;
       margin-top: 24px;
+    }
+
+    .form-footer a {
+      color: #4f46e5;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .form-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ── Error notification banner ── */
+    .alert-error {
+      display: none;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      color: #dc2626;
+      font-size: 0.825rem;
+      padding: 9px 12px;
+      margin-bottom: 16px;
+      animation: alertShake 0.3s ease;
+    }
+
+    .alert-error.show {
+      display: block;
+    }
+
+    @keyframes alertShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    /* ── Spinner ── */
+    .spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.65s linear infinite;
+    }
+
+    .btn-submit.loading .btn-text {
+      display: none;
+    }
+
+    .btn-submit.loading .spinner {
+      display: block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .login-card {
+        grid-template-columns: 1fr;
+        max-width: 440px;
+        min-height: auto;
+        padding: 12px;
+      }
+
+      .hero-panel {
+        min-height: 260px;
+        padding: 24px;
+      }
+
+      .hero-title {
+        font-size: 1.55rem;
+      }
+
+      .form-panel {
+        padding: 32px 16px 20px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="bg-orbs">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-  </div>
-
-  <div class="card">
-    <div class="icon-wrap">🎂</div>
-    <h1>Admin Panel</h1>
-    <p class="subtitle">Birthday Flipbook · Editor Access</p>
-
-    <div class="error-msg" id="errorMsg">Incorrect password. Please try again.</div>
-
-    <form id="loginForm">
-      <div class="field">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password"
-               placeholder="Enter admin password"
-               autocomplete="current-password"
-               autofocus required />
-        <button type="button" class="toggle-pw" id="togglePw" aria-label="Toggle password visibility">👁️</button>
+  <div class="login-card">
+    <!-- Left Hero Image Panel -->
+    <div class="hero-panel">
+      <div class="brand-wrap">
+        <div class="brand-icon-box">
+          <!-- Clever lightning badge icon -->
+          <svg viewBox="0 0 24 24">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+        </div>
+        <span class="brand-name">clever</span>
       </div>
 
-      <button type="submit" class="btn-login" id="loginBtn">
-        <span class="btn-text">Unlock Admin</span>
-        <span class="spinner"></span>
-      </button>
-    </form>
+      <div class="hero-content">
+        <h2 class="hero-title">Build something<br>amazing today.</h2>
+        <p class="hero-subtext">Maybe some text here will help me see it better.</p>
+      </div>
+    </div>
 
-    <p class="footer-note">🔒 Access restricted to authorized users only.</p>
+    <!-- Right Sign In Form Panel -->
+    <div class="form-panel">
+      <div class="form-wrapper">
+        <div class="form-header">
+          <h1 class="form-title">Sign in</h1>
+          <p class="form-subtitle">Welcome back! Enter your details below.</p>
+        </div>
+
+        <div class="alert-error" id="errorBanner">Incorrect password. Please try again.</div>
+
+        <form id="signInForm" autocomplete="on">
+          <!-- Email Field -->
+          <div class="field-group">
+            <label class="field-label" for="email">Email address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="input-control"
+              placeholder="Your email address"
+              value="admin@clever.com"
+              autocomplete="username"
+              required
+            />
+          </div>
+
+          <!-- Password Field -->
+          <div class="field-group">
+            <div class="field-row">
+              <label class="field-label" for="password" style="margin-bottom:0;">Password</label>
+              <a href="#" class="field-link" id="forgotLink">Forgot password?</a>
+            </div>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="input-control"
+              placeholder="Password"
+              autocomplete="current-password"
+              autofocus
+              required
+            />
+          </div>
+
+          <!-- Keep me logged in -->
+          <label class="checkbox-row" for="remember">
+            <input type="checkbox" id="remember" class="checkbox-input" checked />
+            <span class="custom-checkbox">
+              <svg viewBox="0 0 24 24" fill="none">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </span>
+            <span class="checkbox-label">Keep me logged in</span>
+          </label>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <span class="btn-text">Sign in</span>
+            <span class="spinner"></span>
+          </button>
+        </form>
+
+        <!-- OR Divider -->
+        <div class="divider">
+          <span class="divider-text">OR</span>
+        </div>
+
+        <!-- Social Buttons -->
+        <div class="social-grid">
+          <button type="button" class="btn-social" id="githubBtn">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            </svg>
+            <span>GitHub</span>
+          </button>
+          <button type="button" class="btn-social" id="googleBtn">
+            <svg viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+            </svg>
+            <span>Google</span>
+          </button>
+        </div>
+
+        <!-- Footer -->
+        <p class="form-footer">
+          Don't have an account? <a href="#" id="signUpLink">Sign up</a>
+        </p>
+      </div>
+    </div>
   </div>
 
   <script>
-    const form     = document.getElementById('loginForm');
-    const pwInput  = document.getElementById('password');
-    const errorMsg = document.getElementById('errorMsg');
-    const loginBtn = document.getElementById('loginBtn');
-    const togglePw = document.getElementById('togglePw');
-
-    // Toggle password visibility
-    togglePw.addEventListener('click', () => {
-      const isText = pwInput.type === 'text';
-      pwInput.type = isText ? 'password' : 'text';
-      togglePw.textContent = isText ? '👁️' : '🙈';
-    });
+    const form = document.getElementById('signInForm');
+    const pwInput = document.getElementById('password');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorBanner = document.getElementById('errorBanner');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      errorMsg.classList.remove('show');
-      loginBtn.classList.add('loading');
-      loginBtn.disabled = true;
+      errorBanner.classList.remove('show');
+      pwInput.classList.remove('error');
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
 
       try {
         const res = await fetch('/api/admin-login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password: pwInput.value })
+          body: JSON.stringify({ password: pwInput.value.trim() })
         });
 
         if (res.ok) {
-          // Redirect to admin on success
           window.location.href = '/admin';
         } else {
+          pwInput.classList.add('error');
           pwInput.value = '';
-          errorMsg.classList.add('show');
-          // Re-trigger shake animation
-          void errorMsg.offsetWidth;
+          errorBanner.textContent = 'Incorrect password. Please try again.';
+          errorBanner.classList.add('show');
+          void errorBanner.offsetWidth;
+          pwInput.focus();
         }
-      } catch {
-        errorMsg.textContent = 'Network error. Please try again.';
-        errorMsg.classList.add('show');
+      } catch (err) {
+        errorBanner.textContent = 'Network error. Please try again.';
+        errorBanner.classList.add('show');
       } finally {
-        loginBtn.classList.remove('loading');
-        loginBtn.disabled = false;
-        pwInput.focus();
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+      }
+    });
+
+    // Helper for demo links
+    ['forgotLink', 'signUpLink', 'githubBtn', 'googleBtn'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          alert('Admin access requires entering the admin password in the password field.');
+          pwInput.focus();
+        });
       }
     });
   </script>

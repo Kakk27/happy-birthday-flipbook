@@ -387,7 +387,7 @@ const server = http.createServer((req, res) => {
     reqUrl = '/admin.html';
   }
   // Clean URL for admin login page
-  if (reqUrl === '/admin-login' || reqUrl === '/admin-login/') {
+  if (reqUrl === '/admin-login' || reqUrl === '/admin-login/' || reqUrl === '/login' || reqUrl === '/login/' || reqUrl === '/login.html') {
     reqUrl = '/admin-login.html';
   }
 
