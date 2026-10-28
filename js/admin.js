@@ -146,7 +146,7 @@
   {cls:'maroon',html:
     '<div class="dotbg dots-maroon"></div>'+
     star('st',43,14,14,0)+star('sp',16,30,5,0)+star('sp',80,26,6,0)+
-    '<div class="back-script">With love,</div>'+
+    '<div class="back-script">Dulzura,</div>'+
     '<p class="back-from" data-b="from"></p>'+
     '<p class="back-foot">Happy birthday, <span data-b="name"></span></p>'}
   ];
@@ -159,7 +159,7 @@
     var p=dateParts();
     var map={name:S.name||DEF.name,nick:S.nick||'',age:S.age,ageWords:words(S.age),
       monthName:new Date(p.y,p.m-1,1).toLocaleString('en-US',{month:'long'}),year:String(p.y),
-      from:S.from||'',fromLine:S.from?'With love, '+S.from:'',letter:S.letter||''};
+      from:S.from||'',fromLine:S.from?'Dulzura, '+S.from:'',letter:S.letter||''};
     $$('[data-b]').forEach(function(el){el.textContent=map[el.getAttribute('data-b')]});
     $$('[data-cal]').forEach(function(el){el.innerHTML=calHTML()});
     var len=(S.letter||'').length;
