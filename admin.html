@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="claude:viewport-fit-sides" content="cover">
+  <title>Birthday Flipbook - Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Poppins:ital,wght@0,400;0,500;0,600;1,600&family=Noto+Sans+Khmer:wght@400;600&family=Noto+Serif+Khmer:wght@400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+  <div class="app" id="app">
+    <header class="top">
+      <div class="brand">Enjoy my gift <i class="star"></i></div>
+      <div class="top-actions">
+        <button class="sound lockbtn" id="lock" type="button" aria-pressed="false" aria-label="Lock Portrait Mode"
+          title="Lock Portrait Mode">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <rect x="6" y="2" width="12" height="20" rx="2.5" />
+            <rect x="9.5" y="11.5" width="5" height="4.2" rx=".8" fill="currentColor" />
+            <path d="M10.4 11.5V10a1.6 1.6 0 013.2 0v1.5" />
+          </svg>
+          <span class="t">Lock Vertical Mode</span>
+        </button>
+        <button class="sound" id="sound" type="button" aria-label="Turn music on" aria-pressed="false"></button>
+        <button class="btn-soft" id="openPanel" type="button" aria-expanded="false" aria-controls="panel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 20h9" />
+            <path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z" />
+          </svg>
+          <span class="lbl">Personalize</span>
+        </button>
+      </div>
+    </header>
+    <main class="stage" id="stage">
+      <div class="book" id="book"></div>
+    </main>
+    <button class="rb side" id="prev" type="button" aria-label="Previous page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 5l-7 7 7 7" />
+      </svg>
+    </button>
+    <button class="rb side" id="next" type="button" aria-label="Next page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true">
+        <path d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+    <nav class="nav" aria-label="Pages">
+      <div class="dots" id="dots"></div>
+    </nav>
+  </div>
+
+  <aside class="panel" id="panel" hidden aria-label="Personalize the flipbook">
+    <div class="panel-head">
+      <h2>Make it yours</h2>
+      <button class="x" id="closePanel" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+          aria-hidden="true">
+          <path d="M5 5l14 14M19 5L5 19" />
+        </svg>
+      </button>
+    </div>
+    <label for="f-name">Name
+      <input id="f-name" data-k="name" maxlength="40" autocomplete="off">
+    </label>
+    <label for="f-nick">What you call them
+      <input id="f-nick" data-k="nick" maxlength="30" autocomplete="off">
+    </label>
+    <div class="row">
+      <label for="f-age">Turning
+        <input id="f-age" data-k="age" type="number" min="1" max="99" inputmode="numeric">
+      </label>
+      <label for="f-date">Birthday
+        <input id="f-date" data-k="date" type="date">
+      </label>
+    </div>
+    <label for="f-letter">Your wish
+      <textarea id="f-letter" data-k="letter" maxlength="650"></textarea>
+      <span class="count" id="count"></span>
+    </label>
+    <label for="f-from">From
+      <input id="f-from" data-k="from" maxlength="40" autocomplete="off" placeholder="Your name">
+    </label>
+    <h3 class="sec">Sound</h3>
+    <label for="f-track">Background music
+      <select id="f-track">
+        <option value="box">Music box</option>
+        <option value="pad">Dreamy pad</option>
+        <option value="waltz">Sparkle waltz</option>
+        <option value="custom" id="opt-custom" disabled>My own song</option>
+        <option value="off">No music</option>
+      </select>
+    </label>
+    <button class="btn-soft" id="pickSong" type="button">Choose a song from your device</button>
+    <p class="note" id="songNote">Your song is saved to the server audio folder and synced to all users.</p>
+    <label for="f-vol">Volume
+      <input id="f-vol" type="range" min="0" max="100" step="1">
+    </label>
+    <label class="chk" for="f-sfx"><input id="f-sfx" type="checkbox"> Page-turn sound</label>
+    <h3 class="sec">Display</h3>
+    <label class="chk" for="f-lock"><input id="f-lock" type="checkbox"> Lock Portrait Mode</label>
+    <p class="note">When on, the flipbook only opens in landscape. In portrait, a message asks you to rotate your phone
+      first.</p>
+    <p class="note">Tap any photo frame in the book to add a picture. Photos are saved to the image/ folder and synchronized to the user in real time.</p>
+  </aside>
+
+  <div class="gate" id="gate" hidden role="alertdialog" aria-labelledby="gate-t" aria-describedby="gate-d">
+    <div class="gate-dots" aria-hidden="true"></div>
+    <svg class="gate-phone" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="19" y="6" width="26" height="52" rx="5" />
+      <path d="M28 51h8" />
+    </svg>
+    <h2 id="gate-t">Rotate your phone</h2>
+    <p id="gate-d">Portrait view is locked. Turn your phone sideways to open the flipbook.</p>
+    <button class="btn-soft light" id="gateOff" type="button">Turn off the lock</button>
+  </div>
+
+  <input type="file" id="file" accept="image/*" hidden>
+  <input type="file" id="song" accept="audio/*" hidden>
+
+  <!-- Crop Image Modal -->
+  <div class="crop-modal" id="cropModal" hidden role="dialog" aria-modal="true" aria-labelledby="cropTitle">
+    <div class="crop-backdrop" id="cropBackdrop"></div>
+    <div class="crop-dialog">
+      <div class="crop-header">
+        <div class="crop-title-group">
+          <h3 id="cropTitle">Adjust &amp; Crop Photo</h3>
+          <p class="crop-sub" id="cropSlotName">Drag to reposition or pinch/scroll to zoom</p>
+        </div>
+        <button class="crop-close" id="cropClose" type="button" aria-label="Close">&times;</button>
+      </div>
+      
+      <div class="crop-stage" id="cropStage">
+        <div class="crop-viewport" id="cropViewport">
+          <img id="cropImg" alt="Crop preview" src="">
+          <div class="crop-grid" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="crop-controls">
+        <div class="crop-ctrl-row">
+          <span class="crop-ctrl-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35M8 11h6"/></svg> Zoom</span>
+          <input type="range" id="cropZoom" min="1" max="3" step="0.01" value="1" aria-label="Zoom photo">
+          <span class="crop-ctrl-label"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/></svg></span>
+        </div>
+        <div class="crop-tools">
+          <button type="button" class="btn-crop-tool" id="cropRotate" title="Rotate 90 degrees">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            <span>Rotate</span>
+          </button>
+          <button type="button" class="btn-crop-tool" id="cropFlip" title="Flip horizontally">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3m8-18h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3M12 2v20"/></svg>
+            <span>Flip</span>
+          </button>
+          <button type="button" class="btn-crop-tool" id="cropReset" title="Reset crop">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            <span>Reset</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="crop-actions">
+        <button type="button" class="btn-crop-cancel" id="cropCancel">Cancel</button>
+        <button type="button" class="btn-crop-save" id="cropSave">
+          <span class="crop-save-text">Crop &amp; Save</span>
+          <span class="crop-save-spinner" hidden></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/heic2any.js"></script>
+  <script src="js/browser-image-compression.js"></script>
+  <script src="js/cropper-modal.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+
+</html>

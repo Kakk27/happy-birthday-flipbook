@@ -1,0 +1,8 @@
+@import url('style.css');
+
+/* Ensure 100% opacity in mobile responsive single mode */
+.single .leaf,
+.single .leaf.flipped,
+.single .leaf.turning {
+  opacity: 1 !important;
+}

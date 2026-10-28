@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "browser-image-compression": "^2.0.2",
+    "heic-convert": "^2.1.0",
+    "heic2any": "^0.0.4"
+  }
+}

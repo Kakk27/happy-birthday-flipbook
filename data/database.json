@@ -1,0 +1,24 @@
+{
+  "settings": {
+    "name": "---",
+    "nick": "my beloved",
+    "age": 23,
+    "date": "2026-11-03",
+    "from": "",
+    "letter": "Happy Birthday, my dear! 🤍🎂\n\nI hope your special day is filled with love, happiness, and beautiful moments that make you smile. May this new chapter of your life bring you peace, good health, endless blessings, and everything your heart has been wishing for. You deserve all the sweetest things in life, today and always.\n\nKeep that beautiful smile, keep being the wonderful person you are, and never forget how special you are. May your dreams come true one by one, and may life always give you reasons to be happy. ❤️\n\nHappy Birthday once again! May your heart always be as beautiful as your soul. 🫶🏻✨"
+  },
+  "photos": {
+    "letter": "/image/letter_1793142257651.jpg",
+    "p5a": "/image/p5a_1793142277415.jpg"
+  },
+  "audio": {
+    "track": "custom",
+    "vol": 0.6,
+    "music": false,
+    "sfx": true,
+    "customTrack": "/audio/audio-wedding_1793132271515.mp3",
+    "customTrackName": "audio-wedding.mp3"
+  },
+  "lock": false,
+  "updatedAt": 1793142277633
+}
