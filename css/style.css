@@ -148,7 +148,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
   touch-action: pan-y pinch-zoom;
   cursor: pointer
 }
@@ -157,7 +157,7 @@ body {
   position: relative;
   width: calc(var(--pw)*2);
   height: calc(var(--pw)*4/3);
-  perspective: calc(var(--pw)*6);
+  perspective: calc(var(--pw)*8);
   transition: transform var(--flip) cubic-bezier(.5, .05, .2, 1);
   user-select: none;
   -webkit-user-select: none;

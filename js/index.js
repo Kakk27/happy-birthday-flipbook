@@ -333,11 +333,11 @@
 
     if (m === 'spread') {
       var maxW = Math.max(120, (w - 136) / 2);
-      var maxH = Math.max(120, (h - 24) * 0.75);
+      var maxH = Math.max(120, (h - 48) * 0.68);
       pw = Math.floor(Math.min(maxW, maxH, 1000));
     } else {
       var maxW = Math.max(120, w - 24);
-      var maxH = Math.max(120, (h - 20) * 0.75);
+      var maxH = Math.max(120, (h - 40) * 0.68);
       pw = Math.floor(Math.min(maxW, maxH, 750));
     }
     pw = Math.max(120, pw);
