@@ -416,7 +416,37 @@
   customAudio.preload = 'auto';
   if(A.customTrack) customAudio.src = A.customTrack;
 
-  var AC=null,master,musicBus,sfxBus,reverb,rvSend,noiseBuf,trackNode=null,timer=null,playing=false,lastSfx=0;
+  /* ── Attempt autoplay immediately on load ─────────────────────────────── */
+  var autoplayHint = document.getElementById('autoplay-hint');
+  function hideHint(){ if(autoplayHint){ autoplayHint.classList.add('hidden'); } }
+
+  function tryAutoplay(){
+    if(!A.music || A.track==='off') return;
+    if(A.track==='custom' && A.customTrack){
+      customAudio.volume = 0; // start muted to bypass some policies
+      customAudio.play().then(function(){
+        // Fade in volume smoothly
+        var target = Math.max(0, Math.min(1, A.vol));
+        var step = target / 20;
+        var fade = setInterval(function(){
+          customAudio.volume = Math.min(target, customAudio.volume + step);
+          if(customAudio.volume >= target) clearInterval(fade);
+        }, 50);
+        playing = true;
+        hideHint();
+        updSound();
+      }).catch(function(){
+        // Browser blocked autoplay — show hint, wait for first interaction
+        if(autoplayHint) autoplayHint.classList.remove('hidden');
+      });
+    }
+  }
+  // Try immediately, and also after metadata is loaded
+  tryAutoplay();
+  customAudio.addEventListener('loadedmetadata', function(){ if(!playing) tryAutoplay(); });
+  /* ─────────────────────────────────────────────────────────────────────── */
+
+
   var soundB=$('#sound');
   var ICON_ON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg>';
   var ICON_OFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9.5l5 5M22 9.5l-5 5"/></svg>';
@@ -568,6 +598,7 @@
     unlock();
     if(A.music&&A.track!=='off'){
       startMusic();
+      hideHint();
     }
     if((customAudio&&!customAudio.paused)||(AC&&AC.state==='running')){
       detach();

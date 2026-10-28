@@ -1180,6 +1180,36 @@ body {
   color: var(--paper)
 }
 
+/* autoplay hint — shown only when browser blocks autoplay */
+.autoplay-hint {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 999px;
+  pointer-events: none;
+  animation: hint-pulse 2s ease-in-out infinite;
+  transition: opacity 0.4s, transform 0.4s;
+  white-space: nowrap;
+}
+.autoplay-hint.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(12px);
+}
+@keyframes hint-pulse {
+  0%,100% { opacity: 0.85; }
+  50%      { opacity: 1; }
+}
+
 .panel .sec {
   margin: 6px 0 -2px;
   font-family: var(--script);
