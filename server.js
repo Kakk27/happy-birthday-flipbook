@@ -311,6 +311,10 @@ const server = http.createServer((req, res) => {
   if (reqUrl === '/' || reqUrl === '') {
     reqUrl = '/index.html';
   }
+  // Clean URL for admin panel
+  if (reqUrl === '/admin' || reqUrl === '/admin/') {
+    reqUrl = '/admin.html';
+  }
 
   const safePath = path.normalize(path.join(__dirname, reqUrl));
 
@@ -386,7 +390,7 @@ server.listen(PORT, () => {
   console.log(` Birthday Flipbook Server is running!`);
   console.log(`========================================`);
   console.log(` > Flipbook (User):  http://localhost:${PORT}/`);
-  console.log(` > Admin (Editor):   http://localhost:${PORT}/admin.html`);
+  console.log(` > Admin (Editor):   http://localhost:${PORT}/admin`);
   console.log(` > Database File:    ${DB_FILE}`);
   console.log(` > Audio Storage:    ${AUDIO_DIR}`);
   console.log(` > Image Storage:    ${IMAGE_DIR}`);
