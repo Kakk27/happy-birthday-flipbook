@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login · Birthday Flipbook</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink:    #ff6b9d;
+      --rose:    #ff4d8d;
+      --purple:  #c084fc;
+      --bg:      #0d0a12;
+      --card:    rgba(255,255,255,0.05);
+      --border:  rgba(255,255,255,0.10);
+      --text:    #f0e6ff;
+      --muted:   rgba(240,230,255,0.45);
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ── Animated background ── */
+    .bg-orbs {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+    .orb-1 { width: 420px; height: 420px; background: #ff6b9d; top: -10%; left: -10%; animation-duration: 14s; }
+    .orb-2 { width: 350px; height: 350px; background: #c084fc; bottom: -5%; right: -5%; animation-duration: 18s; animation-delay: -4s; }
+    .orb-3 { width: 240px; height: 240px; background: #ff9a3c; top: 40%; left: 60%; animation-duration: 10s; animation-delay: -8s; }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(30px, -30px) scale(1.08); }
+    }
+
+    /* ── Card ── */
+    .card {
+      position: relative; z-index: 1;
+      width: min(420px, 92vw);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 48px 40px 40px;
+      box-shadow: 0 8px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ── Icon ── */
+    .icon-wrap {
+      width: 64px; height: 64px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      border-radius: 18px;
+      display: grid; place-items: center;
+      margin: 0 auto 24px;
+      box-shadow: 0 4px 24px rgba(255,107,157,0.4);
+      font-size: 28px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-6px); }
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #fff 30%, var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+
+    /* ── Form ── */
+    .field { position: relative; margin-bottom: 20px; }
+
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .field input {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 48px 14px 16px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .field input:focus {
+      border-color: var(--pink);
+      box-shadow: 0 0 0 3px rgba(255,107,157,0.18);
+    }
+
+    .toggle-pw {
+      position: absolute; right: 14px; top: 42px;
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 1.1rem;
+      transition: color 0.2s;
+      padding: 0; line-height: 1;
+    }
+    .toggle-pw:hover { color: var(--text); }
+
+    /* ── Error ── */
+    .error-msg {
+      display: none;
+      background: rgba(255,80,80,0.15);
+      border: 1px solid rgba(255,80,80,0.35);
+      border-radius: 10px;
+      color: #ff8080;
+      font-size: 0.85rem;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      text-align: center;
+      animation: shake 0.35s ease;
+    }
+    .error-msg.show { display: block; }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25%      { transform: translateX(-6px); }
+      75%      { transform: translateX(6px); }
+    }
+
+    /* ── Button ── */
+    .btn-login {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--rose), var(--purple));
+      color: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+      box-shadow: 0 4px 20px rgba(255,77,141,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-login::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(255,255,255,0.12);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .btn-login:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,77,141,0.5); }
+    .btn-login:hover:not(:disabled)::after { opacity: 1; }
+    .btn-login:active:not(:disabled) { transform: translateY(0); }
+    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .btn-login .spinner {
+      display: none;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto;
+    }
+    .btn-login.loading .btn-text { display: none; }
+    .btn-login.loading .spinner  { display: block; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="card">
+    <div class="icon-wrap">🎂</div>
+    <h1>Admin Panel</h1>
+    <p class="subtitle">Birthday Flipbook · Editor Access</p>
+
+    <div class="error-msg" id="errorMsg">Incorrect password. Please try again.</div>
+
+    <form id="loginForm">
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password"
+               placeholder="Enter admin password"
+               autocomplete="current-password"
+               autofocus required />
+        <button type="button" class="toggle-pw" id="togglePw" aria-label="Toggle password visibility">👁️</button>
+      </div>
+
+      <button type="submit" class="btn-login" id="loginBtn">
+        <span class="btn-text">Unlock Admin</span>
+        <span class="spinner"></span>
+      </button>
+    </form>
+
+    <p class="footer-note">🔒 Access restricted to authorized users only.</p>
+  </div>
+
+  <script>
+    const form     = document.getElementById('loginForm');
+    const pwInput  = document.getElementById('password');
+    const errorMsg = document.getElementById('errorMsg');
+    const loginBtn = document.getElementById('loginBtn');
+    const togglePw = document.getElementById('togglePw');
+
+    // Toggle password visibility
+    togglePw.addEventListener('click', () => {
+      const isText = pwInput.type === 'text';
+      pwInput.type = isText ? 'password' : 'text';
+      togglePw.textContent = isText ? '👁️' : '🙈';
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.classList.remove('show');
+      loginBtn.classList.add('loading');
+      loginBtn.disabled = true;
+
+      try {
+        const res = await fetch('/api/admin-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pwInput.value })
+        });
+
+        if (res.ok) {
+          // Redirect to admin on success
+          window.location.href = '/admin';
+        } else {
+          pwInput.value = '';
+          errorMsg.classList.add('show');
+          // Re-trigger shake animation
+          void errorMsg.offsetWidth;
+        }
+      } catch {
+        errorMsg.textContent = 'Network error. Please try again.';
+        errorMsg.classList.add('show');
+      } finally {
+        loginBtn.classList.remove('loading');
+        loginBtn.disabled = false;
+        pwInput.focus();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,6 +1,30 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+
+// ── Admin Auth ──────────────────────────────────────────────────────────────
+const ADMIN_PASSWORD_HASH = crypto.createHash('sha256').update('cle031002').digest('hex');
+const adminSessions = new Set(); // active session tokens
+
+function generateToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+function parseCookies(cookieHeader = '') {
+  return Object.fromEntries(
+    cookieHeader.split(';')
+      .map(c => c.trim().split('='))
+      .filter(p => p.length === 2)
+      .map(([k, v]) => [k.trim(), decodeURIComponent(v.trim())])
+  );
+}
+
+function isAdminAuthenticated(req) {
+  const cookies = parseCookies(req.headers.cookie);
+  return cookies.admin_session && adminSessions.has(cookies.admin_session);
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 const PORT = process.env.PORT || 3000;
 const DATA_DIR = path.join(__dirname, 'data');
@@ -125,6 +149,53 @@ const server = http.createServer((req, res) => {
 
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   const pathname = decodeURI(parsedUrl.pathname);
+
+  // 0a. POST /api/admin-login - Validate password and issue session cookie
+  if (req.method === 'POST' && pathname === '/api/admin-login') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try {
+        const { password } = JSON.parse(body || '{}');
+        const hash = crypto.createHash('sha256').update(String(password || '')).digest('hex');
+        if (hash === ADMIN_PASSWORD_HASH) {
+          const token = generateToken();
+          adminSessions.add(token);
+          res.writeHead(200, {
+            'Content-Type': 'application/json',
+            'Set-Cookie': `admin_session=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=86400`
+          });
+          return res.end(JSON.stringify({ success: true }));
+        } else {
+          res.writeHead(401, { 'Content-Type': 'application/json' });
+          return res.end(JSON.stringify({ error: 'Invalid password' }));
+        }
+      } catch {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Bad request' }));
+      }
+    });
+    return;
+  }
+
+  // 0b. POST /api/admin-logout - Clear session
+  if (req.method === 'POST' && pathname === '/api/admin-logout') {
+    const cookies = parseCookies(req.headers.cookie);
+    if (cookies.admin_session) adminSessions.delete(cookies.admin_session);
+    res.writeHead(200, {
+      'Content-Type': 'application/json',
+      'Set-Cookie': 'admin_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0'
+    });
+    return res.end(JSON.stringify({ success: true }));
+  }
+
+  // 0c. Protect /admin, /admin/, /admin.html - redirect to login if not authenticated
+  if (['/admin', '/admin/', '/admin.html'].includes(pathname)) {
+    if (!isAdminAuthenticated(req)) {
+      res.writeHead(302, { 'Location': '/admin-login' });
+      return res.end();
+    }
+  }
 
   // 1. GET /api/data - Return database records
   if (req.method === 'GET' && pathname === '/api/data') {
@@ -314,6 +385,10 @@ const server = http.createServer((req, res) => {
   // Clean URL for admin panel
   if (reqUrl === '/admin' || reqUrl === '/admin/') {
     reqUrl = '/admin.html';
+  }
+  // Clean URL for admin login page
+  if (reqUrl === '/admin-login' || reqUrl === '/admin-login/') {
+    reqUrl = '/admin-login.html';
   }
 
   const safePath = path.normalize(path.join(__dirname, reqUrl));
