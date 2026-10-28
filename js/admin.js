@@ -115,7 +115,7 @@
     '<i class="st" style="color:#5a0e12;left:84cqw;top:56cqw;width:5cqw;height:5cqw"></i>'},
   /* 9 scattered */
   {cls:'maroon',html:
-    fr('p7a',35,2,34,22,{pad:.7,bg:'#f4ead9',rot:-2})+fr('p7b',72,18,28,27,{pad:.7,bg:'#f4ead9',rot:3})+
+    fr('p7a',23,2,34,22,{pad:.7,bg:'#f4ead9',rot:-2})+fr('p7b',72,18,28,27,{pad:.7,bg:'#f4ead9',rot:3})+
     fr('p7c',0,43,26,25,{pad:.7,bg:'#f4ead9',rot:-3})+fr('p7d',49,63,27,26,{pad:.7,bg:'#f4ead9',rot:2})+
     fr('p7e',11,101,31,27,{pad:.7,bg:'#f4ead9',rot:-2})+fr('p7f',80,97,20,29,{pad:.7,bg:'#f4ead9',rot:3})+
     '<span class="w" style="left:63cqw;top:10cqw">happy</span><span class="w" style="left:31cqw;top:54cqw">(beloved)</span><span class="w" style="left:86cqw;top:77cqw">fav</span>'+
