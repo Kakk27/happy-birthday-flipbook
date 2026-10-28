@@ -152,26 +152,60 @@
       height: 19px;
     }
 
-    /* Subtle enter hint */
-    .enter-hint {
+    /* ── Submit Button ── */
+    .btn-submit {
+      width: 100%;
+      height: 44px;
+      background: #0f172a;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 0.78rem;
-      color: #9ca3af;
-      margin-top: 10px;
-      padding-left: 2px;
+      justify-content: center;
+      margin-top: 18px;
+      transition: background-color 0.15s ease, transform 0.1s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     }
 
-    .kbd-chip {
-      background: #f3f4f6;
-      border: 1px solid #e5e7eb;
-      border-radius: 4px;
-      padding: 2px 6px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: #6b7280;
-      font-family: inherit;
+    .btn-submit:hover:not(:disabled) {
+      background: #1e293b;
+    }
+
+    .btn-submit:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    /* ── Spinner ── */
+    .spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.65s linear infinite;
+    }
+
+    .btn-submit.loading .btn-text {
+      display: none;
+    }
+
+    .btn-submit.loading .spinner {
+      display: block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     /* ── Error notification banner ── */
@@ -254,12 +288,13 @@
                 </svg>
               </button>
             </div>
-            <div class="enter-hint">
-              <span>Press</span>
-              <span class="kbd-chip">Enter ↵</span>
-              <span>to unlock</span>
-            </div>
           </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <span class="btn-text">Sign in</span>
+            <span class="spinner"></span>
+          </button>
         </form>
       </div>
     </div>
@@ -268,6 +303,7 @@
   <script>
     const form = document.getElementById('signInForm');
     const pwInput = document.getElementById('password');
+    const submitBtn = document.getElementById('submitBtn');
     const errorBanner = document.getElementById('errorBanner');
     const togglePw = document.getElementById('togglePw');
 
@@ -287,6 +323,8 @@
 
       errorBanner.classList.remove('show');
       pwInput.classList.remove('error');
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
 
       try {
         const res = await fetch('/api/admin-login', {
@@ -308,6 +346,9 @@
       } catch (err) {
         errorBanner.textContent = 'Network error. Please try again.';
         errorBanner.classList.add('show');
+      } finally {
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
       }
     });
   </script>
