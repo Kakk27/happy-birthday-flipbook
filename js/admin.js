@@ -276,11 +276,13 @@
     if(!w||!h)return;
 
     var isLandscape = (w > h);
-    var m = (w >= 700 && isLandscape && (w/h >= 1.25)) ? 'spread' : 'single';
+    var isTabletOrDesktop = (w >= 650);
+    var m = (isTabletOrDesktop || (w >= 560 && isLandscape && (w/h >= 1.25))) ? 'spread' : 'single';
     var pw;
 
     if(m === 'spread'){
-      var maxW = Math.max(120, (w - 136) / 2);
+      var sideMargin = (w >= 768) ? 120 : 90;
+      var maxW = Math.max(120, (w - sideMargin) / 2);
       var maxH = Math.max(120, (h - 48) * 0.68);
       pw = Math.floor(Math.min(maxW, maxH, 1000));
     } else {
@@ -695,7 +697,10 @@
   /* ---------- lock portrait mode ---------- */
   var LOCK=false;try{LOCK=localStorage.getItem('flipbook-lock')==='1'}catch(e){}
   var gate=$('#gate'),lockB=$('#lock'),lockIn=$('#f-lock'),appEl=$('#app');
-  function portrait(){return window.innerHeight>window.innerWidth}
+  function portrait(){
+    var isPhone = Math.min(window.innerWidth, window.innerHeight) < 650;
+    return (window.innerHeight > window.innerWidth) && isPhone;
+  }
   function applyLock(){
     var block=LOCK&&portrait();
     gate.hidden=!block;

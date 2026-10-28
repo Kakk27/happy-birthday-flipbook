@@ -316,11 +316,15 @@
     if (!w || !h) return;
 
     var isLandscape = (w > h);
-    var m = (w >= 700 && isLandscape && (w / h >= 1.25)) ? 'spread' : 'single';
+    // iPad/tablets (w >= 650) view both pages at once in both vertical (portrait) and horizontal (landscape) view.
+    // Phones in portrait stay in single-page mode.
+    var isTabletOrDesktop = (w >= 650);
+    var m = (isTabletOrDesktop || (w >= 560 && isLandscape && (w / h >= 1.25))) ? 'spread' : 'single';
     var pw;
 
     if (m === 'spread') {
-      var maxW = Math.max(120, (w - 136) / 2);
+      var sideMargin = (w >= 768) ? 120 : 90;
+      var maxW = Math.max(120, (w - sideMargin) / 2);
       var maxH = Math.max(120, (h - 48) * 0.68);
       pw = Math.floor(Math.min(maxW, maxH, 1000));
     } else {
@@ -725,8 +729,9 @@
   var gate = $('#gate'), appEl = $('#app');
   function checkOrientation() {
     var isVertical = window.innerHeight > window.innerWidth;
-    // Block vertical view only if Lock Portrait mode is turned ON by admin
-    var block = LOCK && isVertical;
+    var isPhone = Math.min(window.innerWidth, window.innerHeight) < 650;
+    // Block vertical view only if Lock Portrait mode is turned ON by admin and device is a phone
+    var block = LOCK && isVertical && isPhone;
     if (gate) {
       gate.hidden = !block;
       try { appEl.inert = block; } catch (e) { }
