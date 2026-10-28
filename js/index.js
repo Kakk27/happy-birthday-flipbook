@@ -590,6 +590,51 @@
     updSound();
   });
 
+  /* ---------- fullscreen ---------- */
+  var fsB = $('#fullscreen');
+  function isFs() {
+    return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+  }
+  function updateFsUI() {
+    if (!fsB) return;
+    var active = isFs();
+    fsB.classList.toggle('on', active);
+    fsB.setAttribute('aria-pressed', active ? 'true' : 'false');
+    fsB.setAttribute('aria-label', active ? 'Exit fullscreen' : 'Enter fullscreen');
+    fsB.title = active ? 'Exit fullscreen' : 'Enter fullscreen';
+    var iconEnter = fsB.querySelector('.fs-icon-enter');
+    var iconExit = fsB.querySelector('.fs-icon-exit');
+    if (iconEnter && iconExit) {
+      iconEnter.style.display = active ? 'none' : 'block';
+      iconExit.style.display = active ? 'block' : 'none';
+    }
+  }
+  function toggleFullscreen() {
+    var doc = document;
+    var el = doc.documentElement;
+    if (!isFs()) {
+      var rfs = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+      if (rfs) {
+        rfs.call(el).catch(function () { });
+      }
+    } else {
+      var efs = doc.exitFullscreen || doc.webkitExitFullscreen || doc.mozCancelFullScreen || doc.msExitFullscreen;
+      if (efs) {
+        efs.call(doc).catch(function () { });
+      }
+    }
+  }
+  if (fsB) {
+    fsB.addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggleFullscreen();
+    });
+    ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(function (ev) {
+      document.addEventListener(ev, updateFsUI);
+    });
+    updateFsUI();
+  }
+
   /* ── Try autoplay immediately on load ── */
   setTimeout(function () {
     if (!A.music || A.track === 'off') return;
