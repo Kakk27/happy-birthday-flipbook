@@ -422,9 +422,7 @@
   var ICON_OFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9.5l5 5M22 9.5l-5 5"/></svg>';
 
   function updSound(){
-    var isCustomPlaying = !!(customAudio && !customAudio.paused);
-    var isSynthPlaying = !!(playing && AC && AC.state==='running' && A.track!=='custom');
-    var on = !!(A.music && A.track!=='off' && (isCustomPlaying || isSynthPlaying || playing));
+    var on = !!(A.music && A.track!=='off');
     soundB.classList.toggle('on',on);
     soundB.setAttribute('aria-pressed',on?'true':'false');
     soundB.setAttribute('aria-label',on?'Turn music off':'Turn music on');
@@ -558,37 +556,6 @@
     var pent=[79,81,84,86,88,91];voice(sfxBus,t+.3,pent[Math.floor(Math.random()*pent.length)],.3,'bell',.1);
   }
 
-  /* ── Autoplay: try immediately, show tap-prompt if blocked ── */
-  var _tapOverlay = null;
-  function showTapPrompt(){
-    if(_tapOverlay) return;
-    _tapOverlay = document.createElement('div');
-    _tapOverlay.id = 'tap-to-play';
-    _tapOverlay.innerHTML = '<span class="tap-icon">🎵</span><span class="tap-text">Tap anywhere to play music</span>';
-    _tapOverlay.style.cssText = [
-      'position:fixed','bottom:24px','left:50%','transform:translateX(-50%)',
-      'background:rgba(0,0,0,0.6)','backdrop-filter:blur(10px)',
-      '-webkit-backdrop-filter:blur(10px)',
-      'color:#fff','font-family:inherit','font-size:13px','font-weight:500',
-      'padding:10px 20px','border-radius:100px',
-      'display:flex','align-items:center','gap:8px',
-      'pointer-events:none','z-index:9999',
-      'animation:_tapFadeIn .4s ease both',
-      'box-shadow:0 4px 24px rgba(0,0,0,0.4)'
-    ].join(';');
-    var style = document.createElement('style');
-    style.textContent = '@keyframes _tapFadeIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}} @keyframes _tapPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}} #tap-to-play .tap-icon{animation:_tapPulse 1.2s ease-in-out infinite}';
-    document.head.appendChild(style);
-    document.body.appendChild(_tapOverlay);
-  }
-  function hideTapPrompt(){
-    if(_tapOverlay){
-      _tapOverlay.style.transition='opacity .3s';
-      _tapOverlay.style.opacity='0';
-      setTimeout(function(){if(_tapOverlay){_tapOverlay.remove();_tapOverlay=null;}},350);
-    }
-  }
-
   var EVS=['pointerdown','touchend','click','keydown'];
   function unlock(){if(AC&&AC.state!=='running'){try{AC.resume()}catch(e){}}}
   function detach(){EVS.forEach(function(n){window.removeEventListener(n,onFirst,true)})}
@@ -596,7 +563,6 @@
     if(e.target&&e.target.closest&&e.target.closest('#sound'))return;
     ensureAudio();
     unlock();
-    hideTapPrompt();
     if(A.music&&A.track!=='off'){
       startMusic();
     }
@@ -618,9 +584,7 @@
 
   soundB.addEventListener('click',function(e){
     e.stopPropagation();
-    var isAudPlaying = (customAudio && !customAudio.paused);
-    var isSynthActive = (playing && AC && AC.state==='running');
-    if(isAudPlaying || isSynthActive || playing){
+    if(A.music && A.track!=='off'){
       A.music=false;
       stopMusic();
       try{ localStorage.setItem('flipbook-audio',JSON.stringify(A)); }catch(err){}
@@ -634,21 +598,24 @@
       startMusic();
       try{ localStorage.setItem('flipbook-audio',JSON.stringify(A)); }catch(err){}
     }
+    updSound();
   });
 
   /* ── Try autoplay immediately on load ── */
   setTimeout(function(){
     if(!A.music || A.track==='off') return;
-    var tryPlay = customAudio.play();
-    if(tryPlay && tryPlay.then){
-      tryPlay.then(function(){
-        playing = true;
-        hideTapPrompt();
-        updSound();
-      }).catch(function(){
-        // Browser blocked autoplay — show tap prompt
-        showTapPrompt();
-      });
+    if(A.track==='custom' && customAudio){
+      var tryPlay = customAudio.play();
+      if(tryPlay && tryPlay.then){
+        tryPlay.then(function(){
+          playing = true;
+          updSound();
+        }).catch(function(){
+          // Audio autoplay paused pending touch; sound button remains on/true
+        });
+      }
+    } else {
+      startMusic();
     }
   }, 300);
 
