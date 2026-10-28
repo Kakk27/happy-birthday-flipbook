@@ -125,7 +125,7 @@
     '<div class="dotbg dots-ink"></div>'+
     '<div class="fr" style="left:8cqw;top:23cqw;width:84cqw;height:100cqw;background:#141010">'+
       '<div class="ph" role="button" tabindex="0" data-id="p8a" aria-label="Add a photo" style="left:1.2cqw;top:1.2cqw;width:81.6cqw;height:41.5cqw;--tone:'+toneFor('p8a')+'">'+HINT+'</div>'+
-      '<div class="ph" role="button" tabindex="0" data-id="p8b" aria-label="Add a photo" style="left:1.2cqw;top:44cqw;width:81.6cqw;height:54.8cqw;--tone:'+toneFor('p8b')+'">'+HINT+'</div>'+
+      '<div class="ph" role="button" tabindex="0" data-id="p8b" aria-label="Add a photo" style="left:1.2cqw;top:44cqw;width:81.6cqw;height:41.5cqw;--tone:'+toneFor('p8b')+'">'+HINT+'</div>'+
     '</div>'},
   /* 11 love */
   {cls:'smudge',html:
